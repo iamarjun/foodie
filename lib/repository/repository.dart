@@ -1,4 +1,5 @@
 import 'package:foodie/models/recipe.dart';
+import 'package:foodie/service/api_service.dart';
 
 abstract class Repository {
   Future<List<Recipe>> fetchRecipes(String recipe);
@@ -6,6 +7,10 @@ abstract class Repository {
 }
 
 class RecipeRepository extends Repository {
+  final ApiService apiService;
+
+  RecipeRepository(this.apiService);
+
   @override
   Future<Recipe> fetchRecipeDetail(String recipeId) {
     // TODO: implement fetchRecipeDetail
@@ -14,7 +19,6 @@ class RecipeRepository extends Repository {
 
   @override
   Future<List<Recipe>> fetchRecipes(String recipe) {
-    // TODO: implement fetchRecipes
-    throw UnimplementedError();
+    return apiService.fetchRecipes(recipe);
   }
 }
