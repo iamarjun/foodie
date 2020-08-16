@@ -30,7 +30,7 @@ class ApiService {
   dynamic _returnResponse(Response response) {
     switch (response.statusCode) {
       case 200:
-        var responseJson = json.decode(response.body.toString());
+        var responseJson = json.decode(response.body);
         print(responseJson);
         return responseJson;
       case 400:

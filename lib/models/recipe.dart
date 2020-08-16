@@ -23,7 +23,9 @@ class Recipe extends Equatable {
   factory Recipe.fromJson(Map<String, dynamic> json) {
     return Recipe(
       imageUrl: json['image_url'],
-      socialRank: json['social_rank'],
+      socialRank: json['social_rank'] is int
+          ? 0.0 + json['social_rank']
+          : json['social_rank'],
       id: json['_id'],
       publisher: json['publisher'],
       sourceUrl: json['source_url'],

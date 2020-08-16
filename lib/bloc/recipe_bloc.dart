@@ -23,7 +23,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         final response = await recipeRepository.fetchRecipes(event.recipeName);
         yield RecipeLoaded(response);
       } catch (e) {
-        yield RecipeError(e.message);
+        yield RecipeError(e.toString());
       }
     }
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:foodie/bloc/recipe_bloc.dart';
+import 'package:foodie/models/recipe.dart';
+import 'package:foodie/ui/recipe_item.dart';
 
 class RecipeHomePage extends StatefulWidget {
   RecipeHomePage({Key key, this.title}) : super(key: key);
@@ -12,14 +14,6 @@ class RecipeHomePage extends StatefulWidget {
 }
 
 class _RecipeHomePageState extends State<RecipeHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   void submit(BuildContext context, String recipe) {
     final recipeBloc = BlocProvider.of<RecipeBloc>(context);
     recipeBloc.add(GetRecipeList(recipe));
@@ -59,6 +53,13 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
     );
   }
 
+  Widget _recipeList(List<Recipe> recipes) {
+    return ListView.builder(
+      itemCount: recipes.length,
+      itemBuilder: (context, postition) => RecipeItem(recipes[postition]),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,17 +84,12 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
             } else if (state is RecipeLoading) {
               return _loading();
             } else if (state is RecipeLoaded) {
-              print(state.recipes.map((e) => e.toJson()));
+              return _recipeList(state.recipes);
             } else if (state is RecipeError) {
               return _initial();
             }
           },
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ),
     );
   }

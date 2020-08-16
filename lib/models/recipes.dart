@@ -11,7 +11,7 @@ class Recipes extends Equatable {
     return Recipes(
       count: json['count'],
       recipes: json['recipes'] != null
-          ? json['recipes'].map((v) => new Recipes.fromJson(v)).toList()
+          ? json['recipes'].map<Recipe>((v) => new Recipe.fromJson(v)).toList()
           : null,
     );
   }
