@@ -1,8 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:foodie/models/recipe.dart';
 
 class Recipes extends Equatable {
   final int count;
-  final List<Recipes> recipes;
+  final List<Recipe> recipes;
 
   Recipes({this.count, this.recipes});
 
