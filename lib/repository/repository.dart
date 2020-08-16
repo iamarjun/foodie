@@ -2,7 +2,7 @@ import 'package:foodie/models/recipe.dart';
 import 'package:foodie/service/api_service.dart';
 
 abstract class Repository {
-  Future<List<Recipe>> fetchRecipes(String recipe);
+  Future<List<Recipe>> fetchRecipes({String recipe, int pageNo});
   Future<Recipe> fetchRecipeDetail(String recipeId);
 }
 
@@ -18,7 +18,7 @@ class RecipeRepository extends Repository {
   }
 
   @override
-  Future<List<Recipe>> fetchRecipes(String recipe) {
-    return apiService.fetchRecipes(recipe);
+  Future<List<Recipe>> fetchRecipes({String recipe, int pageNo}) {
+    return apiService.fetchRecipes(recipe: recipe, pageNo: pageNo);
   }
 }

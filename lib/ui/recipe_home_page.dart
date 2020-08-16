@@ -14,6 +14,23 @@ class RecipeHomePage extends StatefulWidget {
 }
 
 class _RecipeHomePageState extends State<RecipeHomePage> {
+  final _scrollController = ScrollController();
+  final _textController = TextEditingController();
+  final _scrollThreshold = 200.0;
+
+  _RecipeHomePageState() {
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    final recipeBloc = BlocProvider.of<RecipeBloc>(context);
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    if (maxScroll - currentScroll <= _scrollThreshold) {
+      recipeBloc.add(GetRecipeList(_textController.text));
+    }
+  }
+
   void submit(BuildContext context, String recipe) {
     final recipeBloc = BlocProvider.of<RecipeBloc>(context);
     recipeBloc.add(GetRecipeList(recipe));
@@ -28,6 +45,7 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
         right: 16,
       ),
       child: TextField(
+        controller: _textController,
         textInputAction: TextInputAction.search,
         onSubmitted: (query) => submit(context, query),
         decoration: InputDecoration(
@@ -55,6 +73,7 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
 
   Widget _recipeList(List<Recipe> recipes) {
     return ListView.builder(
+      controller: _scrollController,
       itemCount: recipes.length,
       itemBuilder: (context, postition) => RecipeItem(recipes[postition]),
     );
@@ -92,5 +111,12 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _textController.dispose();
+    super.dispose();
   }
 }

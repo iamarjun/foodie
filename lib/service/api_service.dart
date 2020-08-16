@@ -13,12 +13,13 @@ class ApiService {
 
   ApiService._in();
 
-  Future<List<Recipe>> fetchRecipes(String recipe) async {
+  Future<List<Recipe>> fetchRecipes({String recipe, int pageNo}) async {
     var recipes;
 
     try {
-      final response =
-          await get('https://recipesapi.herokuapp.com/api/search?q=$recipe');
+      final response = await get(
+          'https://recipesapi.herokuapp.com/api/search?q=$recipe&pageNo=$pageNo');
+      print(pageNo);
       recipes = Recipes.fromJson(_returnResponse(response)).recipes;
     } on SocketException {
       throw FetchDataException('No Internet connection');
@@ -31,7 +32,6 @@ class ApiService {
     switch (response.statusCode) {
       case 200:
         var responseJson = json.decode(response.body);
-        print(responseJson);
         return responseJson;
       case 400:
         throw BadRequestException(response.body.toString());

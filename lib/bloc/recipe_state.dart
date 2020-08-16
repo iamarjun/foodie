@@ -20,10 +20,20 @@ class RecipeLoading extends RecipeState {
 
 class RecipeLoaded extends RecipeState {
   final List<Recipe> recipes;
-  const RecipeLoaded(this.recipes);
+  final bool hasReachedMax;
+  const RecipeLoaded({this.recipes, this.hasReachedMax});
+
+  RecipeLoaded copyWith({
+    List<Recipe> recipes,
+    bool hasReachedMax,
+  }) {
+    return RecipeLoaded(
+        recipes: recipes ?? this.recipes,
+        hasReachedMax: hasReachedMax ?? this.hasReachedMax);
+  }
 
   @override
-  List<Object> get props => [recipes];
+  List<Object> get props => [recipes, hasReachedMax];
 }
 
 class RecipeError extends RecipeState {

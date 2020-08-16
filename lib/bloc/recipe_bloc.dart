@@ -10,6 +10,7 @@ part 'recipe_state.dart';
 
 class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   final Repository recipeRepository;
+  var _pageNo = 1;
 
   RecipeBloc(this.recipeRepository) : super(RecipeInitial());
 
@@ -17,14 +18,32 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   Stream<RecipeState> mapEventToState(
     RecipeEvent event,
   ) async* {
-    yield RecipeLoading();
-    if (event is GetRecipeList) {
+  
+
+    if (event is GetRecipeList && !_hasReachedMax(state)) {
       try {
-        final response = await recipeRepository.fetchRecipes(event.recipeName);
-        yield RecipeLoaded(response);
+        if (state is RecipeInitial) {
+          _pageNo = 1;
+          final response =
+              await recipeRepository.fetchRecipes(recipe: event.recipeName, pageNo: _pageNo);
+          yield RecipeLoaded(recipes: response, hasReachedMax: false);
+        }
+        if (state is RecipeLoaded) {
+          _pageNo++;
+          final response =
+              await recipeRepository.fetchRecipes(recipe: event.recipeName, pageNo: _pageNo);
+          yield response.isEmpty || response.length < 30
+              ? (state as RecipeLoaded).copyWith(hasReachedMax: true)
+              : RecipeLoaded(
+                  recipes: (state as RecipeLoaded).recipes + response,
+                  hasReachedMax: false);
+        }
       } catch (e) {
         yield RecipeError(e.toString());
       }
     }
   }
+
+  bool _hasReachedMax(RecipeState state) =>
+      state is RecipeLoaded && state.hasReachedMax;
 }
