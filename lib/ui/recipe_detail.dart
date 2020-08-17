@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:foodie/models/recipe.dart';
 
 class RecipeDetail extends StatelessWidget {
-  const RecipeDetail({Key key}) : super(key: key);
+  final Recipe recipe;
+  const RecipeDetail({this.recipe, key}) : super(key: key);
 
   final double _radius = 150.0;
 
@@ -84,7 +86,7 @@ class RecipeDetail extends StatelessWidget {
                   child: Center(
                     child: Container(
                       child: CircleAvatar(
-                        backgroundImage: NetworkImage(''),
+                        backgroundImage: NetworkImage(recipe.imageUrl),
                         radius: _radius,
                         backgroundColor: Colors.green[800],
                       ),

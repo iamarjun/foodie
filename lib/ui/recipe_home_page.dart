@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:foodie/bloc/recipe_bloc.dart';
 import 'package:foodie/models/recipe.dart';
+import 'package:foodie/ui/recipe_detail.dart';
 import 'package:foodie/ui/recipe_item.dart';
 
 class RecipeHomePage extends StatefulWidget {
@@ -75,6 +76,14 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
     );
   }
 
+  void _showBottomSheet(Recipe recipe) {
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (context) => RecipeDetail(recipe: recipe),
+    );
+  }
+
   Widget _recipeList(List<Recipe> recipes) {
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -85,7 +94,10 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
       scrollDirection: Axis.vertical,
       controller: _scrollController,
       itemCount: recipes.length,
-      itemBuilder: (context, postition) => RecipeItem(recipes[postition]),
+      itemBuilder: (context, postition) => InkWell(
+        onTap: () => _showBottomSheet(recipes[postition]),
+        child: RecipeItem(recipes[postition]),
+      ),
     );
   }
 
@@ -125,7 +137,7 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
         child: BlocBuilder<RecipeBloc, RecipeState>(
           builder: (context, state) {
             if (state is RecipeInitial) {
-              return _initial();
+              return _loading();
             } else if (state is RecipeLoading) {
               return _loading();
             } else if (state is RecipeLoaded) {
