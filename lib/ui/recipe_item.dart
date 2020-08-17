@@ -3,42 +3,39 @@ import 'package:foodie/models/recipe.dart';
 
 class RecipeItem extends StatelessWidget {
   const RecipeItem(this._recipe, {Key key}) : super(key: key);
-  static const double _radius = 50;
+  static const double _radius = 8;
   final Recipe _recipe;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(_radius),
-            bottomLeft: Radius.circular(_radius),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(_radius),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(_radius),
+        child: Stack(
+          fit: StackFit.expand,
           children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: _radius,
-                ),
-                CircleAvatar(
-                  radius: _radius - 5,
-                  backgroundImage: NetworkImage(_recipe.imageUrl),
-                ),
-              ],
+            Image.network(
+              _recipe.imageUrl,
+              fit: BoxFit.cover,
             ),
-            SizedBox(
-              width: 10,
-            ),
-            Flexible(
-              child: Text(
-                '${_recipe.title}',
-                style: TextStyle(fontSize: 18),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: 50,
+                width: double.infinity,
+                color: const Color(0xFF000000).withOpacity(0.5),
+                child: Center(
+                  child: Text(
+                    _recipe.title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ),
             )
           ],

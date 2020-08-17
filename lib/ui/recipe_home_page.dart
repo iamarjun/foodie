@@ -72,7 +72,13 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
   }
 
   Widget _recipeList(List<Recipe> recipes) {
-    return ListView.builder(
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount:
+              (MediaQuery.of(context).orientation == Orientation.portrait)
+                  ? 2
+                  : 3),
+      scrollDirection: Axis.vertical,
       controller: _scrollController,
       itemCount: recipes.length,
       itemBuilder: (context, postition) => RecipeItem(recipes[postition]),
