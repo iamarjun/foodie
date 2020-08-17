@@ -17,6 +17,15 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
   final _scrollController = ScrollController();
   final _textController = TextEditingController();
   final _scrollThreshold = 200.0;
+  Icon actionIcon = new Icon(
+    Icons.search,
+    color: Colors.white,
+  );
+
+  Widget appBarTitle = new Text(
+    "Foodie",
+    style: new TextStyle(color: Colors.white),
+  );
 
   _RecipeHomePageState() {
     _scrollController.addListener(_onScroll);
@@ -38,30 +47,25 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
 
   Widget _initial() {
     return Center(
-        child: Padding(
-      padding: const EdgeInsets.only(
-        top: 20,
-        left: 16,
-        right: 16,
+        child: TextField(
+      controller: _textController,
+      cursorColor: Colors.white,
+      textInputAction: TextInputAction.search,
+      onSubmitted: (query) => submit(context, query),
+      style: TextStyle(
+        color: Colors.white,
       ),
-      child: TextField(
-        controller: _textController,
-        textInputAction: TextInputAction.search,
-        onSubmitted: (query) => submit(context, query),
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.only(
-            left: 20,
+      decoration: InputDecoration(
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.transparent),
           ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-          hintText: 'Chicken....',
-          suffixIcon: Icon(Icons.search),
-          hintStyle: new TextStyle(
-            color: Colors.grey[500],
-            fontSize: 12,
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.transparent),
           ),
-        ),
-        textAlign: TextAlign.start,
-      ),
+          prefixIcon: Icon(Icons.search, color: Colors.white),
+          hintText: "Chicken...",
+          hintStyle: TextStyle(color: Colors.white)),
+      textAlign: TextAlign.start,
     ));
   }
 
@@ -89,8 +93,24 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: appBarTitle,
         elevation: 0.0,
+        actions: <Widget>[
+          new IconButton(
+            icon: actionIcon,
+            onPressed: () {
+              setState(() {
+                if (this.actionIcon.icon == Icons.search) {
+                  this.actionIcon = Icon(Icons.close);
+                  this.appBarTitle = _initial();
+                } else {
+                  this.actionIcon = Icon(Icons.search);
+                  this.appBarTitle = Text(widget.title);
+                }
+              });
+            },
+          ),
+        ],
       ),
       body: BlocListener<RecipeBloc, RecipeState>(
         listener: (context, state) {
