@@ -37,6 +37,7 @@ class RecipeDetail extends StatelessWidget {
                   child: Padding(
                       padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           SizedBox(
                             height: _radius / 2,
@@ -46,19 +47,38 @@ class RecipeDetail extends StatelessWidget {
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16.0),
                           ),
+                          SizedBox(
+                            height: 5.0,
+                          ),
                           Text(
-                            recipe.ingredients.toString(),
-                            textAlign: TextAlign.center,
+                            'Ingredients',
+                            textAlign: TextAlign.start,
                             style: TextStyle(
                               fontSize: 14.0,
                             ),
                           ),
                           SizedBox(
-                            height: 30.0,
+                            height: 5.0,
+                          ),
+                          Flexible(
+                            child: SingleChildScrollView(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  recipe.ingredients != null
+                                      ? recipe.ingredients.join('\n')
+                                      : '',
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontSize: 14.0,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                           Padding(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 28.0),
+                                const EdgeInsets.symmetric(horizontal: 14.0),
                             child: Container(),
                           ),
                         ],
