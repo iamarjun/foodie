@@ -19,12 +19,3 @@ class GetRecipeList extends RecipeEvent {
   @override
   List<Object> get props => [recipeName];
 }
-
-class GetRecipeDetail extends RecipeEvent {
-  final String recipeId;
-
-  const GetRecipeDetail(this.recipeId);
-
-  @override
-  List<Object> get props => [recipeId];
-}

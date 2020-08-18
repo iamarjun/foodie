@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:foodie/bloc/recipe_bloc.dart';
+import 'package:foodie/bloc/recipedetail_bloc.dart';
 import 'package:foodie/models/recipe.dart';
+import 'package:foodie/repository/repository.dart';
+import 'package:foodie/service/api_service.dart';
 import 'package:foodie/ui/recipe_detail.dart';
 import 'package:foodie/ui/recipe_item.dart';
 
@@ -80,7 +83,28 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
       context: context,
-      builder: (context) => RecipeDetail(recipe: recipe),
+      builder: (context) => BlocProvider(
+        create: (context) {
+          final bloc = RecipeDetailBloc(RecipeRepository(ApiService()));
+          bloc.add(GetRecipeDetail(recipe.recipeId));
+          return bloc;
+        },
+        child: BlocBuilder<RecipeDetailBloc, RecipeDetailState>(
+          builder: (context, state) {
+            if (state is RecipeDetailInitial) {
+              return RecipeDetail(recipe: recipe);
+            } else if (state is RecipeDetailLoading) {
+              return RecipeDetail(recipe: recipe);
+            } else if (state is RecipeDetailLoaded) {
+              print(state.recipe.toJson());
+              return RecipeDetail(recipe: state.recipe);
+            } else if (state is RecipeDetailError) {
+              print(state.message);
+              return RecipeDetail(recipe: recipe);
+            }
+          },
+        ),
+      ),
     );
   }
 
@@ -136,19 +160,17 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
             ));
           }
         },
-        child: BlocBuilder<RecipeBloc, RecipeState>(
-          builder: (context, state) {
-            if (state is RecipeInitial) {
-              return _loading();
-            } else if (state is RecipeLoading) {
-              return _loading();
-            } else if (state is RecipeLoaded) {
-              return _recipeList(state.recipes);
-            } else if (state is RecipeError) {
-              return _initial();
-            }
-          },
-        ),
+        child: BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
+          if (state is RecipeInitial) {
+            return _loading();
+          } else if (state is RecipeLoading) {
+            return _loading();
+          } else if (state is RecipeLoaded) {
+            return _recipeList(state.recipes);
+          } else if (state is RecipeError) {
+            return _initial();
+          }
+        }),
       ),
     );
   }

@@ -42,12 +42,12 @@ class RecipeDetail extends StatelessWidget {
                             height: _radius / 2,
                           ),
                           Text(
-                            '',
+                            recipe.title,
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20.0),
+                                fontWeight: FontWeight.bold, fontSize: 16.0),
                           ),
                           Text(
-                            '',
+                            recipe.ingredients.toString(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 14.0,

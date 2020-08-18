@@ -13,8 +13,7 @@ class RecipeRepository extends Repository {
 
   @override
   Future<Recipe> fetchRecipeDetail(String recipeId) {
-    // TODO: implement fetchRecipeDetail
-    throw UnimplementedError();
+    return apiService.fetchRecipeDetail(recipeId: recipeId);
   }
 
   @override

@@ -21,7 +21,6 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     if (event is ResetEvent) {
       yield RecipeInitial();
     }
-
     if (event is GetRecipeList && !_hasReachedMax(state)) {
       try {
         if (state is RecipeInitial) {
@@ -42,17 +41,6 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         }
       } catch (e) {
         yield RecipeError(e.toString());
-      }
-    }
-
-    if (event is GetRecipeDetail) {
-      yield RecipeDetailLoading();
-      try {
-        final response =
-            await recipeRepository.fetchRecipeDetail(event.recipeId);
-        yield RecipeDetailLoaded(recipe: response);
-      } catch (e) {
-        yield RecipeDetailError(e.toString());
       }
     }
   }

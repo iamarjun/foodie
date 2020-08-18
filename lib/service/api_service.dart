@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:foodie/models/recipe.dart';
+import 'package:foodie/models/recipe_detail.dart';
 import 'package:foodie/models/recipes.dart';
 import 'package:foodie/service/api_exceptions.dart';
 import 'package:http/http.dart';
@@ -26,6 +27,19 @@ class ApiService {
     }
 
     return recipes;
+  }
+
+  Future<Recipe> fetchRecipeDetail({String recipeId}) async {
+    var recipe;
+    try {
+      final response =
+          await get('http://recipesapi.herokuapp.com/api/get?rId=$recipeId');
+      recipe = RecipeDetail.fromJson(_returnResponse(response)).recipe;
+    } on SocketException {
+      throw FetchDataException('No Internet connection');
+    }
+
+    return recipe;
   }
 
   dynamic _returnResponse(Response response) {

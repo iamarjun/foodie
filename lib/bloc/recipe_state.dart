@@ -43,33 +43,3 @@ class RecipeError extends RecipeState {
   @override
   List<Object> get props => [message];
 }
-
-class RecipeDetailInitial extends RecipeState {
-  const RecipeDetailInitial();
-
-  @override
-  List<Object> get props => [];
-}
-
-class RecipeDetailLoading extends RecipeState {
-  const RecipeDetailLoading();
-
-  @override
-  List<Object> get props => [];
-}
-
-class RecipeDetailLoaded extends RecipeState {
-  final Recipe recipe;
-  const RecipeDetailLoaded({this.recipe});
-
-  @override
-  List<Object> get props => [recipe];
-}
-
-class RecipeDetailError extends RecipeState {
-  final String message;
-  const RecipeDetailError(this.message);
-
-  @override
-  List<Object> get props => [message];
-}
