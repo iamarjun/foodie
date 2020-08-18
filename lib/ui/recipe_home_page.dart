@@ -43,7 +43,7 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
 
   void submit(BuildContext context, String recipe) {
     final recipeBloc = BlocProvider.of<RecipeBloc>(context);
-    recipeBloc.add(GetRecipeList(recipe));
+    recipeBloc..add(ResetEvent())..add(GetRecipeList(recipe));
   }
 
   Widget _initial() {
@@ -103,6 +103,8 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final recipeBloc = BlocProvider.of<RecipeBloc>(context);
+    recipeBloc.add(GetRecipeList("chicken"));
     return Scaffold(
       appBar: AppBar(
         title: appBarTitle,

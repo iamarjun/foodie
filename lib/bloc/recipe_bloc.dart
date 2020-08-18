@@ -18,6 +18,10 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   Stream<RecipeState> mapEventToState(
     RecipeEvent event,
   ) async* {
+    if (event is ResetEvent) {
+      yield RecipeInitial();
+    }
+
     if (event is GetRecipeList && !_hasReachedMax(state)) {
       try {
         if (state is RecipeInitial) {
